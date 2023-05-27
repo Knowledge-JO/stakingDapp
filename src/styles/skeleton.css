@@ -1,0 +1,26 @@
+@media(max-width: 800px){
+    .stake-info{
+        display:  grid;
+        grid-template-columns: 350px;
+    }
+    .stakeBalanceInfo-container{
+        margin-top: 50px;
+    }
+}
+
+
+@media (max-width: 600px){
+    .info-container{
+        margin-bottom: 100px;
+    }
+    .info-cards{
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        grid-gap: 30px;
+    }
+    .stake-info{
+        display:  grid;
+        grid-template-columns: auto;
+    }
+
+}
