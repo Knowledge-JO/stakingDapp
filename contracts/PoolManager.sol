@@ -7,13 +7,12 @@ import "./Math.sol";
 library PoolManager {
 
     struct PoolState {
-        // uint8 mutex;
         uint64 periodFinish;
         uint64 rewardsDuration;
         uint64 lastUpdateTime;
         uint160 distributor;
         uint256 rewardRate;
-        uint256 rewardPerTokenStored; // token staked
+        uint256 rewardPerTokenStored;
     }
 
     function lastTimeRewardApplicable(PoolState storage state) internal view returns (uint256)
