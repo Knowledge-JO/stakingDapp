@@ -22,5 +22,10 @@
         display:  grid;
         grid-template-columns: auto;
     }
-
+    .facts{
+        grid-template-columns: auto;
+    }
+    .fact_1, .fact_2 {
+        border: none;
+    }
 }
