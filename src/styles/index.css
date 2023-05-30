@@ -147,21 +147,7 @@ button {
   background-color: #8dccc1;
 }
 
-/* Footer */
-.footer{
-  background-color: #141129;
-  width: 100%;
-  height: 50px;
-  color: #fff;
-  display: flex;
-  margin-top: 50px;
-}
-
-.footer p {
-  margin: auto;
-  font-size: 70%;
-}
-
+/* stake info from app.js */
 .stake-info{
   display:  grid;
   grid-template-columns: repeat(2, auto);
@@ -215,4 +201,50 @@ button {
   outline: none;
   padding: 5px;
   padding-left: 10px;
+}
+
+/* 
+faq section */
+
+.facts-container{
+  background-color: #141129;
+  margin-top: 100px;
+  padding: 100px 50px ;
+  color: #fff;
+  
+}
+
+.facts-container h3{
+  margin-bottom: 20px;
+}
+
+.facts{
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-gap: 30px;
+}
+
+.facts h4{
+  margin-bottom: 10px;
+  color: #8dccc1;
+}
+
+.fact_1, .fact_2{
+  border-right: 1px #fff solid;
+  padding-right: 10px;
+}
+
+/* Footer */
+.footer{
+  background-color: #141129;
+  width: 100%;
+  height: 50px;
+  color: #fff;
+  display: flex;
+  margin-top: 100px;
+}
+
+.footer p {
+  margin: auto;
+  font-size: 70%;
 }
