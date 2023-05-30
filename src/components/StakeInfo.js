@@ -1,5 +1,4 @@
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+
 const StakeInfo = () => {
     return ( 
         <div className="stakeInfo-container">
@@ -22,7 +21,7 @@ const StakeInfo = () => {
                     4
                 </div>
             </div>
-            <ToastContainer position="top-right" />
+            
         </div>
     );
 }

@@ -170,7 +170,7 @@ button {
   padding-top: 50px;
 }
 
-.stakeForm-container{
+.stakeForm-container, .unstakeForm-container{
   position: fixed;
   background-color: rgba(20, 17, 41,0.5);
   height: 100vh;
@@ -178,7 +178,7 @@ button {
   display: none;
 }
 
-.stakeForm {
+.stakeForm, .unstakeForm {
   background-color: #fff;
   height: 200px;
   width: 500px;
@@ -203,7 +203,7 @@ button {
   margin: auto;
 }
 
-.stake{
+.stake, .unstake{
   align-self: center;
   margin-top: 20px;
 }

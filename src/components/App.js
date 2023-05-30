@@ -3,6 +3,8 @@ import Hero from './Hero';
 import Info from './Info';
 import StakeBalanceInfo from './StakeBalanceInfo';
 import StakeInfo from './StakeInfo';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -15,6 +17,7 @@ function App() {
         <StakeInfo></StakeInfo>
         <StakeBalanceInfo></StakeBalanceInfo>
       </div>
+      <ToastContainer position="top-right" />
     </div>
   );
 }

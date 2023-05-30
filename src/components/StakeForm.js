@@ -1,20 +1,21 @@
 import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import { ethers } from "ethers";
+import connectWallet from "./helpers/connectWallet"
 import stakeVCABI from '../ABI/stakingContractABI'
 import contractABI from '../ABI/stakeTokenABI'
-
+import { contractAddress, stakingContractAddress } from "../ABI/contractAddresses";
 
 const StakeForm = () => {
-    const [amount, setAmount] = useState(0)
+    // const [amount, setAmount] = useState(0)
     const [approvalStatus, setApprovalStatus] = useState('idle')
     const [stakingStatus, setStakingStatus] = useState('idle')
-    const contractAddress = ""
-    const stakingContractAddress = ""
-    const handleAmount = (event) => {
-        event.preventDefault();
-        setAmount(event.target.value);
-    };
+
+    // const handleAmount = (event) => {
+    //     event.preventDefault();
+    //     setAmount(event.target.value);
+    //     console.log(event.target.value)
+    // };
 
     const removeStakeContainer = (e) => {
         if (e.target.className !== 'stakeForm-container') return
@@ -26,17 +27,24 @@ const StakeForm = () => {
         e.preventDefault()
         if (e.target.className !== 'stakeForm') return
         const form = document.querySelector('.stakeForm')
-        console.log(form.stakeAmount.value)
+        // setAmount(form.stakeAmount.value)
+        if (approvalStatus === "approved"){
+          console.log(form.stakeAmount.value)
+          stakeToken(form.stakeAmount.value)
+        }else{
+          approveToken(form.stakeAmount.value)
+        }
     }
-    const approveToken = async () => {
+    const approveToken = async (amount) => {
         try {
           setApprovalStatus("approving");
-    
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = await provider.getSigner();
+
+          const {signer} = await connectWallet()
+
           const ERC20 = new ethers.Contract(contractAddress, contractABI, signer);
     
           // Approve tokens for spending
+          
           const approveERC20 = await ERC20.approve(stakingContractAddress, amount);
           await approveERC20.wait();
     
@@ -49,12 +57,12 @@ const StakeForm = () => {
         }
     }
 
-    async function stakeToken() {
+    async function stakeToken(amount) {
         try {
           setStakingStatus("staking");
-    
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = await provider.getSigner();
+
+          const {signer} = await connectWallet()
+
           const stakingContract = new ethers.Contract(
             stakingContractAddress,
             stakeVCABI,
@@ -75,6 +83,7 @@ const StakeForm = () => {
         }
     }
 
+
     return ( 
         <div className="stakeForm-container" onClick={removeStakeContainer}>
             <form className="stakeForm" onSubmit={formLogic}>
@@ -82,8 +91,14 @@ const StakeForm = () => {
                     <p>Your Balance: $4111</p>
                 </div>
                 <label>Enter Amount: </label>
-                <input name="stakeAmount" className="amount" type="number" min='1' onChange={handleAmount}/>
-                <div className="stake"><input  className="stakeButton" type="submit" value="Approve"/></div>
+                <input name="stakeAmount" className="amount" type="number" min='1'/>
+                <div className="stake">
+                  { approvalStatus === "approved" ? (
+                    <input className="stakeButton" type="submit" value={stakingStatus === "staking" ? "Staking..." : "Stake Token"}></input> 
+
+                  ):(<input className="stakeButton" type="submit" value={approvalStatus === "approving" ? "Approving..." : "Approve Token"}></input>)}
+                </div>
+                
             </form>
         </div>
     );
