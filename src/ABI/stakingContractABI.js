@@ -317,5 +317,4 @@ const stakeVCABI = [
 		"type": "function"
 	}
 ]
-
 export default stakeVCABI;

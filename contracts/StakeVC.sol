@@ -3,13 +3,11 @@
 
 // VTC - 0x1684648596569c449b1fb85071a57DEaB0471840
 // VAI - 0x87a2B87e13c68d911EE378708F3D34f08F77960c
-
+// 0x7489444edDB8aB9cE19989906E58828Ec1dBE935
 pragma solidity ^0.8.0;
 
 
 import "./ReentrancyGuard.sol";
-import "./Math.sol";
-import "./Address.sol";
 import "./SafeERC20.sol";
 import "./IERC20.sol";
 import "./PoolManager.sol";
@@ -96,8 +94,8 @@ contract StakeVC is ReentrancyGuard {
         require(_amount > 0, "Stake must be greater than zero");
 
         stakingToken.safeTransferFrom(msg.sender, address(this), _amount);
-        _totalStake += _amount;
-        _balances[msg.sender] += _amount;
+        _totalStake += _amount  * 10**18;
+        _balances[msg.sender] += _amount * 10**18;
 
         emit Staked(msg.sender, _amount);
 
@@ -113,6 +111,16 @@ contract StakeVC is ReentrancyGuard {
         }
 
         emit RewardPaid(msg.sender, reward);
+    }
+
+    function withdraw(uint256 amount) public payable nonReentrant updateRewards(msg.sender) {
+        require(amount > 0, "Must be greater than zero");
+
+        _totalStake -= amount;
+        _balances[msg.sender] -= amount;
+        stakingToken.safeTransfer(msg.sender, amount);
+
+        emit Withdrawn(msg.sender, amount);
     }
 
 
@@ -151,10 +159,10 @@ contract StakeVC is ReentrancyGuard {
 
     function depositRewardTokens(uint256 amount) external payable onlyDistributor{
         require(amount > 0, "Must be greater than zero");
-
+        uint256 _amount = amount * 10**18;
         rewardToken.safeTransferFrom(msg.sender, address(this), amount);
 
-        notifyRewardAmount(amount);
+        notifyRewardAmount(_amount);
     }
 
     function notifyRewardAmount(uint256 reward) public payable updateRewards(address(0)) onlyDistributor {

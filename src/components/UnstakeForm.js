@@ -25,7 +25,8 @@ const Unstake = () => {
     const unstakeFormlogic = (e) => {
         e.preventDefault()
         const form = document.querySelector('.unstakeForm')
-        unStakeToken(form.unstakeAmount.value)
+        let amount = `${Number(form.unstakeAmount.value) * 10**18}`
+        unStakeToken(amount)
     }
 
     // write a function to withdraw the stakedBalance
@@ -68,8 +69,8 @@ const Unstake = () => {
                 <div className="y-balance">
                     <p>Your Balance: {stakeBalance}</p>
                 </div>
-                <label>Enter Amount: </label>
-                <input name="unstakeAmount" className="amount" type="number" min='1'/>
+                {/* <label>Enter Amount: </label> */}
+                <input name="unstakeAmount" placeholder="Enter Amount" className="amount" type="number" min='1'/>
                 <div className="unstake">
                     <input className="stakeButton" type="submit" value={unstakeStatus === "unStaking"? "unStaking...": "Unstake Token"}></input> 
                 </div>

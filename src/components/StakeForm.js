@@ -1,21 +1,21 @@
 import { ToastContainer, toast } from "react-toastify";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import connectWallet from "./helpers/connectWallet"
 import stakeVCABI from '../ABI/stakingContractABI'
 import contractABI from '../ABI/stakeTokenABI'
+import {walletBalance, checkConnection} from "./helpers/getStakedBalance"
 import { contractAddress, stakingContractAddress } from "../ABI/contractAddresses";
 
 const StakeForm = () => {
     // const [amount, setAmount] = useState(0)
     const [approvalStatus, setApprovalStatus] = useState('idle')
     const [stakingStatus, setStakingStatus] = useState('idle')
+    const [walletB, setWalletBalance] = useState(0)
 
-    // const handleAmount = (event) => {
-    //     event.preventDefault();
-    //     setAmount(event.target.value);
-    //     console.log(event.target.value)
-    // };
+    useEffect(() => {
+      getwalletBalanceHere()
+    }, [])
 
     const removeStakeContainer = (e) => {
         if (e.target.className !== 'stakeForm-container') return
@@ -28,11 +28,11 @@ const StakeForm = () => {
         if (e.target.className !== 'stakeForm') return
         const form = document.querySelector('.stakeForm')
         // setAmount(form.stakeAmount.value)
+        let amount = `${Number(form.stakeAmount.value) * 10**18}`
         if (approvalStatus === "approved"){
-          console.log(form.stakeAmount.value)
-          stakeToken(form.stakeAmount.value)
+          stakeToken(amount)
         }else{
-          approveToken(form.stakeAmount.value)
+          approveToken(amount)
         }
     }
     const approveToken = async (amount) => {
@@ -83,15 +83,20 @@ const StakeForm = () => {
         }
     }
 
+    const getwalletBalanceHere = async () => {
+      const wallet_b = await walletBalance()
+      setWalletBalance(wallet_b)
+    }
+
 
     return ( 
         <div className="stakeForm-container" onClick={removeStakeContainer}>
             <form className="stakeForm" onSubmit={formLogic}>
                 <div className="y-balance">
-                    <p>Your Balance: $4111</p>
+                    <p>Your Balance: {walletB} </p>
                 </div>
-                <label>Enter Amount: </label>
-                <input name="stakeAmount" className="amount" type="number" min='1'/>
+                {/* <label>Enter Amount: </label> */}
+                <input name="stakeAmount" placeholder="Enter Amount" className="amount" type="number" min='1'/>
                 <div className="stake">
                   { approvalStatus === "approved" ? (
                     <input className="stakeButton" type="submit" value={stakingStatus === "staking" ? "Staking..." : "Stake Token"}></input> 
