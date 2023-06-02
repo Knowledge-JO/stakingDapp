@@ -1,23 +1,25 @@
 import { ethers } from "ethers"
-import connectWallet from "./helpers/connectWallet"
 import { toast } from "react-toastify";
-import { contractAddress, stakingContractAddress } from "../ABI/contractAddresses";
+import { rewardContractAddress, stakingContractAddress } from "../ABI/contractAddresses";
 import stakeVCABI from "../ABI/stakingContractABI";
-import {stakedBalance, walletBalance} from "./helpers/getStakedBalance"
+import rewardABI from "../ABI/rewardContractABI";
+import {stakedBalance, walletBalance, checkConnection} from "./helpers/getStakedBalance"
 import { useState, useEffect } from "react";
 
 
 const StakeBalanceInfo = () => {
-    
     const [reward, setReward] = useState(0)
     const [stakeBalance, setStakedBalance] = useState(0)
     const [walletB, setWalletBalance] = useState(0)
+    const [withdrawalStatus, setWithdrwalStatus] = useState('idle')
+
     // call getStakedBalance with useEffect
     useEffect(() => {
         getStakedBalanceHere()
         getwalletBalanceHere()
-        earned()
+        setInterval(() => {earned()}, 30000)
     },[])
+
 
     const stake = () => {
         const showStakeForm = document.querySelector('.stakeForm-container')
@@ -30,7 +32,8 @@ const StakeBalanceInfo = () => {
 
     const getReward = async () => {
         try {
-          const {signer} = await connectWallet()
+        setWithdrwalStatus('withdrawing')
+          const {signer} = await checkConnection()
   
           const stakingContract = new ethers.Contract(
             stakingContractAddress,
@@ -39,6 +42,7 @@ const StakeBalanceInfo = () => {
           );
           const getReward = await stakingContract.getReward();
           await getReward.wait();
+          setWithdrwalStatus('Withdrawn')
           toast.success("Get Reward Success");
         } catch (error) {
           console.log(error);
@@ -48,7 +52,7 @@ const StakeBalanceInfo = () => {
 
     const earned = async () => {
         try {
-            const {signer, address} = await connectWallet()
+            const {signer, address} = await checkConnection()
             const stakingContract = new ethers.Contract(
                 stakingContractAddress,
                 stakeVCABI,
@@ -56,7 +60,8 @@ const StakeBalanceInfo = () => {
             );
 
             const totalearned = await stakingContract.earned(address)
-            const earnedInt = (ethers.utils.formatUnits(totalearned))
+            let earnedInt = (ethers.utils.formatUnits(totalearned, 18))
+            earnedInt = Math.round(earnedInt)
             console.log('e',totalearned)
             setReward(earnedInt)
         }catch (err) {
@@ -76,7 +81,7 @@ const StakeBalanceInfo = () => {
     
     return (
         <div className="stakeBalanceInfo-container" id="stake">
-            <h3>$VTC Staking</h3>
+            <h3>$VTC-$VAI</h3>
             <div className="wallet-info">
                 <div className="apr data"><p>APR<br/>120%</p></div>
                 <div className="total-balance data">
@@ -106,7 +111,7 @@ const StakeBalanceInfo = () => {
                         Earned <br/>
                         {reward} $VAI
                    </p>
-                   <button className="s-i-btn" onClick={getReward}>Withdraw</button>
+                   <button className="s-i-btn" onClick={getReward}>{withdrawalStatus === "withdrawing"? "Withdrawing..." : "Withdraw"}</button>
                 </div>
             </div>
         </div>

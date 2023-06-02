@@ -17,7 +17,6 @@ export default ( async () => {
         
         const address = await signer.getAddress();
         const truncatedAddr = address.slice(0, 4) + "..." + address.slice(-3)
-
         return {truncatedAddr, signer, address}
     } catch (err) {
         console.log('Error connecting to metamask: ', err)
