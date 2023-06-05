@@ -25,7 +25,7 @@ const Unstake = () => {
     const unstakeFormlogic = (e) => {
         e.preventDefault()
         const form = document.querySelector('.unstakeForm')
-        let amount = `${Number(form.unstakeAmount.value) * 10**18}`
+        let amount = ethers.utils.parseUnits(form.stakeAmount.value, 18)
         unStakeToken(amount)
     }
 
