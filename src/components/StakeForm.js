@@ -28,7 +28,8 @@ const StakeForm = () => {
         if (e.target.className !== 'stakeForm') return
         const form = document.querySelector('.stakeForm')
         // setAmount(form.stakeAmount.value)
-        let amount = `${Number(form.stakeAmount.value) * 10**18}`
+        let amount = ethers.utils.parseUnits(form.stakeAmount.value, 18)
+        console.log(amount)
         if (approvalStatus === "approved"){
           stakeToken(amount)
         }else{

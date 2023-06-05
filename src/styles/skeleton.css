@@ -6,6 +6,16 @@
     .stakeBalanceInfo-container{
         margin-top: 50px;
     }
+    .stake-info{
+        display:  grid;
+        grid-template-columns: auto;
+    }
+    .facts{
+        grid-template-columns: auto;
+    }
+    .fact_1, .fact_2 {
+        border: none;
+    }
 }
 
 
@@ -18,14 +28,5 @@
         grid-template-columns: repeat(2, auto);
         grid-gap: 30px;
     }
-    .stake-info{
-        display:  grid;
-        grid-template-columns: auto;
-    }
-    .facts{
-        grid-template-columns: auto;
-    }
-    .fact_1, .fact_2 {
-        border: none;
-    }
+    
 }
